@@ -112,14 +112,14 @@ body {
 }
 
 .doc-link {
-    color: #4f4e5a;
+    color: #5b5a63;
     text-decoration: none;
     font-size: 15px;
     transition: color 0.2s ease;
 }
 
 .doc-link:hover {
-    color: #fa0505;
+    color: #e04cc0;
     
 }
 
