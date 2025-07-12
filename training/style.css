@@ -1,0 +1,318 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --highlight-color: #e74c3c;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --timeline-color: #3498db;
+            --timeline-dot-size: 16px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding-top: 20px;
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 2.8rem;
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin-top: -5px;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            margin-top: 20px;
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 50px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 25px;
+            border: none;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding-left: 50px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 5px 15px rgba(52,152,219,0.25);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            z-index: 10;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 50px 0 30px;
+            padding-top: 20px;
+        }
+
+        /* 修复后的时间轴线 */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--timeline-color) 0%, rgba(52, 152, 219, 0.2) 100%);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        /* 修复后的时间点样式 */
+        .timeline-dot {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--timeline-dot-size);
+            height: var(--timeline-dot-size);
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--timeline-color);
+            z-index: 3;
+            box-shadow: 0 0 0 5px rgba(52, 152, 219, 0.2);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease-out;
+        }
+
+        .timeline-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-content {
+            position: relative;
+            width: 45%;
+            padding: 25px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            left: 55%;
+        }
+
+        /* 修复后的奇偶项点定位 */
+        .timeline-item:nth-child(odd) .timeline-dot {
+            left: 50%;
+            margin-left: calc(var(--timeline-dot-size)/2 * -1);
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: 50%;
+            margin-left: calc(var(--timeline-dot-size)/2 * -1);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-date i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .timeline-title {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--secondary-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .timeline-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .timeline-desc {
+            margin-bottom: 20px;
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .timeline-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: linear-gradient(to right, var(--primary-color), #2c6ca8);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .timeline-link i {
+            margin-right: 8px;
+        }
+
+        .timeline-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+            font-size: 1.1rem;
+            display: none;
+            background: rgba(255,255,255,0.8);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .loading-indicator.visible {
+            display: block;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .no-results {
+            text-align: center;
+            color: #777;
+            padding: 40px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+            font-size: 1.1rem;
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #777;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            font-size: 1rem;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 50px;
+                left: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 30px;
+                margin-left: calc(var(--timeline-dot-size)/2 * -1);
+            }
+            
+            .search-box {
+                max-width: 90%;
+            }
+        }

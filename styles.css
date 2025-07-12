@@ -1,3 +1,4 @@
+
 /* styles.css */
 
 /* 基础样式重置 */
@@ -36,7 +37,7 @@ body {
 }
 
 .logo-img {
-    width: 380px;
+    width: 30%;
     height: auto;
     margin-right: 15px;
 }
@@ -202,3 +203,81 @@ body {
         font-size: 15px;
     }
 }
+ /* 新增右上角吸附图标样式 */
+        .training-fixed-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .training-fixed-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #9b59b6);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .training-fixed-btn i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .training-fixed-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 20px;
+            }
+            
+            .logo-img {
+                width: 60px;
+            }
+            
+            .brand-name {
+                font-size: 22px;
+            }
+            
+            .en-name {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .training-fixed-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .doc-item {
+                padding: 18px;
+            }
+            
+            .doc-category {
+                font-size: 15px;
+            }
+            
+            .training-link {
+                font-size: 15px;
+            }
+        }

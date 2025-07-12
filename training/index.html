@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>培训记录</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html"><h1>星丽仁·医疗美容诊所</h1></a>
+            <p class="subtitle">诊所培训记录轴</p>
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="搜索时间、标题或内容...">
+            </div>
+        </header>
+        
+        <div class="timeline" id="timelineContainer"></div>
+        
+        <div id="loadingIndicator" class="loading-indicator">
+            <i class="fas fa-spinner fa-spin"></i> 正在加载更多历史节点...
+        </div>
+        <div id="noResults" class="no-results">
+            <i class="fas fa-exclamation-circle"></i> 没有找到匹配的时间节点
+        </div>
+        
+        <footer>
+            <p>©  星丽仁·医疗美容诊所</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timelineContainer = document.getElementById('timelineContainer');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const noResults = document.getElementById('noResults');
+            const searchInput = document.getElementById('searchInput');
+            
+            // 模拟文本文件内容
+            const mockDataText = fetch(data.txt)
+            //  `2025-7-14,院感培训,参与人员：,#
+            // 2025-7-9,感染理论培训、日常消毒培训,参与人员：唐鸣俊、吴妮、郑蓓,./202507/09/index.html`;
+
+            let timelineData = [];
+            let filteredData = [];
+            const itemsPerLoad = 5;
+            let visibleItemCount = itemsPerLoad;
+            let allDataLoaded = false;
+            
+            // 处理文本数据
+            function processTextData(text) {
+                const lines = text.split('\n');
+                timelineData = lines.map(line => {
+                    const [date, title, desc, link] = line.split(',');
+                    return { date, title, desc, link };
+                });
+                filteredData = [...timelineData];
+                renderTimeline();
+                observeLastItem();
+            }
+            
+            // 渲染时间轴
+            function renderTimeline() {
+                timelineContainer.innerHTML = '';
+                
+                const itemsToShow = filteredData.slice(0, visibleItemCount);
+                
+                if (itemsToShow.length === 0) {
+                    noResults.classList.add('visible');
+                    return;
+                }
+                
+                noResults.classList.remove('visible');
+                
+                itemsToShow.forEach((item, index) => {
+                    const timelineItem = document.createElement('div');
+                    timelineItem.className = 'timeline-item';
+                    timelineItem.innerHTML = `
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date"><i class="fas fa-calendar-alt"></i> ${item.date}</div>
+                            <h3 class="timeline-title">${item.title}</h3>
+                            <p class="timeline-desc">${item.desc}</p>
+                            <a href="${item.link}" class="timeline-link"><i class="fas fa-external-link-alt"></i>详情</a>
+                        </div>
+                    `;
+                    timelineContainer.appendChild(timelineItem);
+                    
+                    // 添加淡入动画
+                    setTimeout(() => {
+                        timelineItem.classList.add('active');
+                    }, 100 + (index * 100));
+                });
+                
+                // 检查所有数据是否加载完成
+                allDataLoaded = visibleItemCount >= filteredData.length;
+                loadingIndicator.classList.remove('visible');
+                
+                // 再次开始观察
+                if (!allDataLoaded) {
+                    setTimeout(() => {
+                        observeLastItem();
+                    }, 500);
+                }
+            }
+            
+            // 观察最后一项以实现懒加载
+            function observeLastItem() {
+                const timelineItems = document.querySelectorAll('.timeline-item');
+                if (timelineItems.length === 0) return;
+                
+                const lastItem = timelineItems[timelineItems.length - 1];
+                const observer = new IntersectionObserver((entries) => {
+                    const entry = entries[0];
+                    if (entry.isIntersecting) {
+                        observer.unobserve(lastItem);
+                        loadingIndicator.classList.add('visible');
+                        setTimeout(() => {
+                            visibleItemCount += itemsPerLoad;
+                            renderTimeline();
+                        }, 1000);
+                    }
+                }, { threshold: 0.3 });
+                
+                observer.observe(lastItem);
+            }
+            
+            // 搜索功能
+            function filterTimeline(searchTerm) {
+                visibleItemCount = itemsPerLoad;
+                allDataLoaded = false;
+                
+                if (!searchTerm) {
+                    filteredData = [...timelineData];
+                } else {
+                    const lowerCaseTerm = searchTerm.toLowerCase();
+                    filteredData = timelineData.filter(item => 
+                        item.date.toLowerCase().includes(lowerCaseTerm) ||
+                        item.title.toLowerCase().includes(lowerCaseTerm) ||
+                        item.desc.toLowerCase().includes(lowerCaseTerm)
+                    );
+                }
+                
+                renderTimeline();
+            }
+            
+            // 添加搜索事件监听
+            searchInput.addEventListener('input', () => {
+                filterTimeline(searchInput.value);
+            });
+            
+            // 初始化处理数据
+            processTextData(mockDataText);
+            
+            // 添加窗口大小变化事件监听以重新计算位置
+            window.addEventListener('resize', renderTimeline);
+        });
+    </script>
+</body>
+</html>
