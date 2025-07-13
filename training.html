@@ -154,6 +154,12 @@
             overflow: hidden;
             background-size: cover;
             background-position: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.03);
         }
         
         .photo-label {
@@ -176,6 +182,12 @@
             background-repeat: no-repeat;
             background-color: #f9f9f9;
             border: 1px solid #e0e6ed;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .signature-item:hover {
+            transform: scale(1.05);
         }
         
         .api-status {
@@ -229,6 +241,47 @@
             .reset-button {
                 align-self: stretch;
             }
+        }
+
+        /* 浮窗样式 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover {
+            color: #ff6b6b;
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 20px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -290,6 +343,13 @@
         </div>
     </div>
 
+    <!-- 图片预览浮窗 - 修复后的正确结构 -->
+    <div id="imageModal" class="image-modal">
+        <span class="close-btn">&times;</span>
+        <img id="modalImage" class="modal-content">
+        <div id="loadingText" class="loading-text"></div>
+    </div>
+
     <script>
         // DOM元素
         const tableBody = document.getElementById('table-body');
@@ -298,18 +358,20 @@
         const dateFilter = document.getElementById('training-date');
         const typeFilter = document.getElementById('training-type');
         
+        // 图片预览相关元素 - 修复：添加modalImage变量
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage'); // 新增
+        const loadingText = document.getElementById('loadingText');
+        
         // 所有培训数据
         let allTrainingData = [];
         
         // 将日期字符串格式化为 yyyy/MM/dd
         function formatDateString(dateStr) {
-
-            //if (!dateStr || typeof dateStr !== 'string' || dateStr.length < 4) return dateStr;
-
-            const baseDate = new Date(1899, 12, 31); // 月份0-11（11=12月）
-            baseDate.setUTCDate(baseDate.getUTCDate() + dateStr); // 
+            const baseDate = new Date(1899, 12, 31);
+            baseDate.setUTCDate(baseDate.getUTCDate() + dateStr);
             const year = baseDate.getUTCFullYear();
-            const month = baseDate.getUTCMonth(); // 月份+1调整为1-12
+            const month = baseDate.getUTCMonth();
             const day = baseDate.getUTCDate();            
             return `${year}/${month}/${day}`;
         }
@@ -318,29 +380,64 @@
         function generatePhotoCell(photoUrl) {
             if (!photoUrl) return '';
     
-    return `
-        <div class="photo-item previewable" style="background-image: url('${photoUrl}')" 
-             data-original="${photoUrl}" onclick="previewImage('${photoUrl}')">
-            <div class="photo-label">预览</div>
-        </div>
-    `;
+            return `
+                <div class="photo-item" style="background-image: url('${photoUrl}')" 
+                     data-original="${photoUrl}" onclick="showImageModal('${photoUrl}')">
+                    <div class="photo-label">预览</div>
+                </div>
+            `;
         }
         
         // 生成签名单元格
         function generateSignatureCell(signatureUrl) {
              if (!signatureUrl) return '';
     
-    return `
-        <div class="signature-item previewable" style="background-image: url('${signatureUrl}')"
-             data-original="${signatureUrl}" onclick="previewImage('${signatureUrl}')">
-        </div>
-    `;
+            return `
+                <div class="signature-item" style="background-image: url('${signatureUrl}')"
+                     data-original="${signatureUrl}" onclick="showImageModal('${signatureUrl}')">
+                </div>
+            `;
         }
         
-    function previewImage(url) {
-    window.open(url, '_blank', 'width=800,height=600');
-    }
-
+        // 显示图片浮窗 - 修复：使用正确的modalImage变量
+        function showImageModal(url) {
+            if (!url) return;
+            
+            // 显示加载中状态
+            modalImage.style.display = 'none';
+            loadingText.textContent = '图片加载中...';
+            imageModal.style.display = 'flex';
+            
+            // 创建临时图片对象检查是否已缓存
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                // 图片已缓存，直接显示
+                modalImage.src = url;
+                modalImage.style.display = 'block';
+                loadingText.textContent = '';
+            };
+            
+            tempImg.onerror = function() {
+                // 图片加载失败
+                loadingText.textContent = '图片加载失败';
+            };
+            
+            tempImg.src = url;
+        }
+        
+        // 关闭浮窗
+        function closeImageModal() {
+            imageModal.style.display = 'none';
+            modalImage.src = '';
+        }
+        
+        // 点击浮窗外部关闭
+        imageModal.addEventListener('click', function(e) {
+            if (e.target === imageModal || e.target.classList.contains('close-btn')) {
+                closeImageModal();
+            }
+        });
+        
         // 渲染表格数据
         function renderTable(data) {
             tableBody.innerHTML = '';
@@ -475,6 +572,9 @@
         
         // 初始化页面
         fetchData();
+        
+        // 暴露函数给全局作用域
+        window.showImageModal = showImageModal;
     </script>
 </body>
 </html>
