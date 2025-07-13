@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星丽仁医疗诊所 - 应急预案</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: #333;
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e5799 0%, #207cca 51%, #2989d8 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #2980b9, #6dd5fa);
+            border-radius: 2px;
+        }
+        
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .doc-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #2980b9;
+        }
+        
+        .doc-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .doc-category {
+            background: #2980b9;
+            color: white;
+            padding: 18px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 0;
+        }
+        
+        .doc-list {
+            list-style: none;
+            padding: 20px;
+            min-height: 250px;
+        }
+        
+        .doc-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s;
+        }
+        
+        .doc-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .doc-list li:hover {
+            background-color: #f8f9ff;
+            border-radius: 6px;
+            padding-left: 10px;
+        }
+        
+        .doc-link {
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            transition: color 0.3s;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .doc-link:hover {
+            color: #2980b9;
+        }
+        
+        .doc-link i {
+            margin-right: 12px;
+            font-size: 1.3rem;
+            color: #2980b9;
+            min-width: 30px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 20px;
+            color: #3498db;
+            animation: spin 1.5s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #ffeef0;
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            color: #c0392b;
+        }
+        
+        .api-status {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 20px;
+        }
+        
+        .api-status-item {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .api-status-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #7f8c8d;
+        }
+        
+        .api-status-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2980b9;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            padding: 20px;
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .api-status {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>星丽仁医疗美容诊所</h1>
+            <p>应急预案与文档管理系统</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2 class="section-title">诊所应急预案文档</h2>
+        
+        <div class="api-status">
+            <div class="api-status-item">
+                <div class="api-status-title">API状态</div>
+                <div class="api-status-value" id="apiStatus">待连接...</div>
+            </div>
+            <div class="api-status-item">
+                <div class="api-status-title">文档总数</div>
+                <div class="api-status-value" id="docCount">0</div>
+            </div>
+            <div class="api-status-item">
+                <div class="api-status-title">最后更新</div>
+                <div class="api-status-value" id="lastUpdated">-</div>
+            </div>
+        </div>
+        
+        <div class="docs-grid" id="docsContainer">
+            <!-- 四个分类块将由JavaScript动态生成 -->
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div class="container">
+            <p>星丽仁医疗美容诊所 &copy; 2023 版权所有</p>
+            <p>安全医疗，美丽永恒</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const apiUrl = 'https://api.codetabs.com/v1/proxy/?quest=https%3A%2F%2Ffloral-scene-99da.opstmj.workers.dev%2F';
+            const apiStatusEl = document.getElementById('apiStatus');
+            const docCountEl = document.getElementById('docCount');
+            const lastUpdatedEl = document.getElementById('lastUpdated');
+            const docsContainer = document.getElementById('docsContainer');
+            
+            // 设置最后更新时间
+            lastUpdatedEl.textContent = new Date().toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // 更新API状态
+            apiStatusEl.textContent = '连接中...';
+            apiStatusEl.style.color = '#f39c12';
+            
+            // 创建四个分类块并显示加载状态
+            const categoryTitles = ['预案', '制度', '表格', '表单'];
+            const categoryIcons = {
+                '预案': 'fa-file-medical',
+                '制度': 'fa-file-alt',
+                '表格下载': 'fa-file-excel',
+                '表格模板': 'fa-file-contract'
+            };
+            
+            categoryTitles.forEach(title => {
+                const docItem = document.createElement('div');
+                docItem.className = 'doc-item';
+                docItem.innerHTML = `
+                    <h3 class="doc-category">${title}</h3>
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        正在加载文档...
+                    </div>
+                `;
+                docsContainer.appendChild(docItem);
+            });
+            
+            // 发起API请求
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`网络响应错误: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    apiStatusEl.textContent = '成功';
+                    apiStatusEl.style.color = '#27ae60';
+                    
+                    // 处理API返回的数据
+                    if (data && data.data && data.data.result) {
+                        const resultData = data.data.result;
+                        
+                        // 按文档类型分类
+                        const categorizedData = {
+                            '预案': [],
+                            '制度': [],
+                            '表格': [],
+                            '表单': []
+                        };
+                        
+                        resultData.forEach(doc => {
+                            // 文档数组格式: [文档名称, 文档路径, 文档类型]
+                            const type = doc[2] || '预案'; // 默认类型为预案
+                            
+                            if (categorizedData.hasOwnProperty(type)) {
+                                categorizedData[type].push(doc);
+                            }
+                        });
+                        
+                        // 更新文档总数
+                        const totalDocs = resultData.length;
+                        docCountEl.textContent = totalDocs;
+                        
+                        // 清空容器并重新创建分类块
+                        docsContainer.innerHTML = '';
+                        
+                        // 为每个分类创建文档块
+                        categoryTitles.forEach(title => {
+                            const docsInCategory = categorizedData[title] || [];
+                            
+                            const docItem = document.createElement('div');
+                            docItem.className = 'doc-item';
+                            
+                            const docCategory = document.createElement('h3');
+                            docCategory.className = 'doc-category';
+                            docCategory.textContent = title;
+                            
+                            const docList = document.createElement('ul');
+                            docList.className = 'doc-list';
+                            
+                            // 添加文档项
+                            if (docsInCategory.length > 0) {
+                                docsInCategory.forEach(doc => {
+                                    const [docName, docPath] = doc;
+                                    const listItem = document.createElement('li');
+                                    
+                                    const iconClass = categoryIcons[title] || 'fa-file';
+                                    
+                                    listItem.innerHTML = 
+                                        `<a href="${docPath}" class="doc-link">
+                                            <i class="fas ${iconClass}"></i>
+                                            ${docName}
+                                        </a>`;
+                                    docList.appendChild(listItem);
+                                });
+                            } else {
+                                const emptyMessage = document.createElement('div');
+                                emptyMessage.className = 'empty-message';
+                                emptyMessage.textContent = '暂无文档';
+                                docList.appendChild(emptyMessage);
+                            }
+                            
+                            docItem.appendChild(docCategory);
+                            docItem.appendChild(docList);
+                            docsContainer.appendChild(docItem);
+                        });
+                    } else {
+                        throw new Error('返回的数据格式不正确');
+                    }
+                })
+                .catch(error => {
+                    console.error('获取数据时出错:', error);
+                    apiStatusEl.textContent = '失败';
+                    apiStatusEl.style.color = '#e74c3c';
+                    
+                    // 显示错误信息
+                    docsContainer.innerHTML = `
+                        <div class="doc-item" style="grid-column: 1 / -1;">
+                            <div class="error">
+                                <strong>加载文档时出错：</strong>${error.message}
+                                <p>请检查网络连接或稍后重试</p>
+                                <div style="text-align: center; margin-top: 20px;">
+                                    <button onclick="location.reload()" style="padding: 10px 24px; background:#3498db; color:white; border:none; border-radius:4px; cursor:pointer">
+                                        <i class="fas fa-sync-alt"></i> 重新加载
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+        });
+    </script>
+</body>
+</html>

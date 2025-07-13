@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星丽仁·医疗美容 - 文档管理系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --primary-light: #9d4edd;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-dark: #333;
+            --text-light: #777;
+            --border-light: rgba(0, 0, 0, 0.08);
+            --success: #4CAF50;
+            --error: #f44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #fbf1ff 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, #6a0dad 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.25);
+        }
+
+        .brand-text {
+            line-height: 1.3;
+        }
+
+        .brand-text h1 {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .training-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3);
+        }
+
+        .training-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .title-section {
+            margin: 40px 0 25px;
+        }
+
+        .title-section h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .title-section p {
+            color: var(--text-light);
+            font-size: 16px;
+            margin-top: 8px;
+        }
+
+        /* Stats Overview */
+        .stats-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            min-width: 200px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        /* Card Section */
+        .cards-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h3 i {
+            color: var(--primary);
+        }
+
+        .card-list {
+            list-style: none;
+        }
+
+        .card-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .card-list a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-list a:hover {
+            color: var(--primary-light);
+        }
+
+        .card-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: right;
+        }
+
+        .card-footer a {
+            color: var(--text-light);
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-footer a:hover {
+            color: var(--primary);
+        }
+
+        /* Table Section */
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-light);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .table-header h3 {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f7f7f9;
+            border-radius: 50px;
+            padding: 0 15px;
+            border: 1px solid #e5e5e9;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            padding: 8px;
+            outline: none;
+            min-width: 200px;
+        }
+
+        .search-box i {
+            color: var(--text-light);
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            background: #f7f7f9;
+            border: 1px solid #e5e5e9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .doc-table th {
+            text-align: left;
+            padding: 15px 20px;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .doc-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 15px;
+        }
+
+        .doc-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .doc-table tr:hover {
+            background: rgba(249, 249, 251, 0.5);
+        }
+
+        .type-cell {
+            display: flex;
+            justify-content: center;
+        }
+
+        .type-badge {
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .badge-emergency {
+            background: rgba(226, 101, 43, 0.1);
+            color: #e2652b;
+        }
+
+        .badge-system {
+            background: rgba(138, 43, 226, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-forms {
+            background: rgba(43, 156, 226, 0.1);
+            color: #2b9ce2;
+        }
+
+        .badge-training {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+        }
+
+        .badge-template {
+            background: rgba(255, 152, 0, 0.1);
+            color: #FF9800;
+        }
+
+        .badge-other {
+            background: rgba(158, 158, 158, 0.1);
+            color: #9E9E9E;
+        }
+
+        .link-cell a {
+            background: rgba(138, 43, 226, 0.1);
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .link-cell a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .link-cell a i {
+            margin-right: 7px;
+        }
+
+        .doc-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doc-icon {
+            color: var(--primary);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .spinner {
+            border: 3px solid rgba(138, 43, 226, 0.2);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Success Indicator */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 50px;
+            margin: 10px 0 30px;
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--error);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-light);
+            font-size: 14px;
+            border-top: 1px solid var(--border-light);
+            margin-top: 20px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 0;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .cards-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .doc-table th {
+                display: none;
+            }
+            
+            .doc-table td {
+                display: block;
+                padding: 12px 15px;
+            }
+            
+            .doc-table td::before {
+                content: attr(data-label);
+                font-weight: 500;
+                float: left;
+                color: var(--text-light);
+                margin-right: 10px;
+            }
+            
+            .doc-table tr {
+                display: block;
+                margin-bottom: 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            }
+            
+            .table-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .filter-controls {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header section -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo">XL</div>
+                <div class="brand-text">
+                    <h1>星丽仁·医疗美容</h1>
+                    <p>X-Liren·Medical Beauty</p>
+                </div>
+            </div>
+            <button class="training-btn" onclick="location.href='#training'">
+                <i class="fas fa-clipboard-list"></i> 培训记录
+            </button>
+        </div>
+
+        <!-- Status indicator -->
+        <div id="status-indicator" class="status-indicator status-success">
+            <i class="fas fa-check-circle"></i>
+            <span>文档系统已成功连接服务器 - 数据加载中...</span>
+        </div>
+
+        <!-- Title section -->
+        <div class="title-section">
+            <h2>文档表格资料</h2>
+            <p>以下是诊所所有的相关应急预案、制度文件以及表格下载资源</p>
+        </div>
+
+        <!-- Stats overview -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <h3><i class="fas fa-file-medical"></i> 应急预案文档</h3>
+                <div class="stat-value" id="emergency-count">0</div>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-file-contract"></i> 制度文档</h3>
+                <div class="stat-value" id="system-count">0</div>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-file-download"></i> 表格模板</h3>
+                <div class="stat-value" id="forms-count">0</div>
+            </div>
+            <div class="stat-card">
+                <h3><i class="fas fa-clipboard-check"></i> 培训资料</h3>
+                <div class="stat-value" id="training-count">0</div>
+            </div>
+        </div>
+
+        <!-- Card section -->
+        <div class="cards-section">
+            <div class="card">
+                <h3><i class="fas fa-file-medical"></i> 应急预案</h3>
+                <ul class="card-list" id="emergency-card">
+                    <!-- Will be populated by JS -->
+                </ul>
+                <div class="card-footer">
+                    <a href="#" onclick="filterByType('应急预案')">
+                        <i class="fas fa-external-link-alt"></i> 查看全部
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-file-contract"></i> 制度</h3>
+                <ul class="card-list" id="system-card">
+                    <!-- Will be populated by JS -->
+                </ul>
+                <div class="card-footer">
+                    <a href="#" onclick="filterByType('制度')">
+                        <i class="fas fa-external-link-alt"></i> 查看全部
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-file-download"></i> 表格下载</h3>
+                <ul class="card-list" id="forms-card">
+                    <!-- Will be populated by JS -->
+                </ul>
+                <div class="card-footer">
+                    <a href="#" onclick="filterByType('表格')">
+                        <i class="fas fa-external-link-alt"></i> 查看全部
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-clipboard-check"></i> 培训资料</h3>
+                <ul class="card-list" id="training-card">
+                    <!-- Will be populated by JS -->
+                </ul>
+                <div class="card-footer">
+                    <a href="#" onclick="filterByType('培训')">
+                        <i class="fas fa-external-link-alt"></i> 查看全部
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3>所有文档 <span id="doc-count">(0)</span></h3>
+                <div class="filter-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="搜索文档..." oninput="searchDocuments()">
+                    </div>
+                    <button class="filter-btn active" data-filter="all">全部</button>
+                    <button class="filter-btn" data-filter="应急预案">应急预案</button>
+                    <button class="filter-btn" data-filter="制度">制度</button>
+                    <button class="filter-btn" data-filter="表格">表格</button>
+                    <button class="filter-btn" data-filter="培训">培训</button>
+                </div>
+            </div>
+            
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>文档名称</th>
+                        <th style="text-align: center">类型</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="doc-table-body">
+                    <!-- Table data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Empty state (hidden by default) -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <i class="fas fa-file-excel"></i>
+            <h3>没有找到匹配的文档</h3>
+            <p>请尝试不同的搜索词或筛选条件</p>
+        </div>
+        
+        <!-- Loading indicator -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <span>正在加载文档数据...</span>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2023 星丽仁医疗美容诊所 版权所有</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const tableBody = document.getElementById('doc-table-body');
+        const loadingIndicator = document.getElementById('loading');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const emptyState = document.getElementById('empty-state');
+        const searchInput = document.getElementById('search-input');
+        const docCount = document.getElementById('doc-count');
+        const statusIndicator = document.getElementById('status-indicator');
+        
+        // Stats elements
+        const emergencyCountEl = document.getElementById('emergency-count');
+        const systemCountEl = document.getElementById('system-count');
+        const formsCountEl = document.getElementById('forms-count');
+        const trainingCountEl = document.getElementById('training-count');
+        
+        // API endpoint
+        const API_URL = "https://api.codetabs.com/v1/proxy/?quest=https://floral-scene-99da.opstmj.workers.dev/?type=";
+        
+        // Type definitions with badges
+        const typeBadges = {
+            '应急预案': 'badge-emergency',
+            '制度': 'badge-system',
+            '表格': 'badge-forms',
+            '模板': 'badge-template',
+            '培训': 'badge-training',
+            '其他': 'badge-other'
+        };
+        
+        // Store fetched documents
+        let allDocuments = [];
+        let currentFilter = 'all';
+        let currentSearch = '';
+        
+        // Fetch documents from API
+        async function fetchDocuments() {
+            try {
+                loadingIndicator.style.display = 'flex';
+                emptyState.style.display = 'none';
+                statusIndicator.className = 'status-indicator status-success';
+                statusIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> <span>正在连接服务器...</span>';
+                
+                // List of document types to fetch
+                const docTypes = ['emergency', 'system', 'forms', 'training', 'template'];
+                const requests = docTypes.map(type => axios.get(`${API_URL}${type}`));
+                
+                const responses = await Promise.all(requests);
+                
+                // Process all API responses
+                allDocuments = responses.flatMap((response, index) => {
+                    const type = docTypes[index];
+                    const apiResponse = response.data;
+                    
+                    // Skip if no valid data
+                    if (!apiResponse?.data?.result) {
+                        console.warn(`No data returned for type: ${type}`);
+                        return [];
+                    }
+                    
+                    // Process each document item
+                    return apiResponse.data.result.map(item => {
+                        // Extract data with safety checks
+                        const name = item[0] || '未命名文档';
+                        const url = item[1] || '#';
+                        const docType = item[2] || '其他';
+                        
+                        return {
+                            name: name,
+                            url: url,
+                            type: docType
+                        };
+                    });
+                });
+                
+                // Update UI
+                updateStatistics();
+                renderDocumentCards();
+                renderDocumentTable(allDocuments);
+                
+                // Update the status indicator
+                statusIndicator.className = 'status-indicator status-success';
+                statusIndicator.innerHTML = `<i class="fas fa-check-circle"></i> <span>文档系统已连接成功 - 共加载 ${allDocuments.length} 个文档</span>`;
+                
+                loadingIndicator.style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error fetching documents:', error);
+                
+                // Show error in UI
+                if (tableBody) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: #ff4d4d;">
+                                <i class="fas fa-exclamation-circle"></i> 无法加载文档，请稍后再试
+                                <p style="font-size: 14px; margin-top: 10px;">${error.message || ''}</p>
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+                loadingIndicator.style.display = 'none';
+                statusIndicator.className = 'status-indicator status-error';
+                statusIndicator.innerHTML = `<i class="fas fa-exclamation-triangle"></i> <span>文档系统连接失败 - 请检查网络或联系管理员</span>`;
+            }
+        }
+        
+        // Update statistics counters
+        function updateStatistics() {
+            const emergencyCount = allDocuments.filter(d => d.type.includes('应急')).length;
+            const systemCount = allDocuments.filter(d => d.type.includes('制度')).length;
+            const formsCount = allDocuments.filter(d => d.type.includes('表格') || d.type.includes('模板')).length;
+            const trainingCount = allDocuments.filter(d => d.type.includes('培训')).length;
+            
+            emergencyCountEl.textContent = emergencyCount;
+            systemCountEl.textContent = systemCount; 
+            formsCountEl.textContent = formsCount;
+            trainingCountEl.textContent = trainingCount;
+            
+            docCount.textContent = `(${allDocuments.length})`;
+        }
+        
+        // Render document cards with category-specific content
+        function renderDocumentCards() {
+            const categories = {
+                'emergency-card': { filter: d => d.type.includes('预案'), max: 5 },
+                'system-card': { filter: d => d.type.includes('制度'), max: 5 },
+                'forms-card': { filter: d => d.type.includes('表格'), max: 5 },
+                'training-card': { filter: d => d.type.includes('表单'), max: 5 }
+            };
+            
+            Object.keys(categories).forEach(cardId => {
+                const cardList = document.getElementById(cardId);
+                const { filter, max } = categories[cardId];
+                const documents = allDocuments.filter(filter).slice(0, max);
+                
+                if (documents.length === 0) {
+                    cardList.innerHTML = `<li style="color: #777; justify-content: center;">
+                        <i class="fas fa-info-circle"></i> 暂无文档
+                    </li>`;
+                    return;
+                }
+                
+                cardList.innerHTML = documents.map(doc => `
+                    <li>
+                        <span>${truncate(doc.name, 24)}</span>
+                        <a href="${doc.url}" target="_blank" title="下载">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </li>
+                `).join('');
+            });
+        }
+        
+        // Render document table with filtering and search
+        function renderDocumentTable(documents = []) {
+            if (!documents || documents.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'flex';
+                return;
+            }
+            
+            // Apply search filter
+            let filteredDocuments = documents;
+            if (currentSearch) {
+                const searchTerm = currentSearch.toLowerCase();
+                filteredDocuments = filteredDocuments.filter(doc => 
+                    doc.name.toLowerCase().includes(searchTerm) || 
+                    doc.type.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply type filter
+            if (currentFilter !== 'all') {
+                filteredDocuments = filteredDocuments.filter(doc => 
+                    doc.type.includes(currentFilter)
+                );
+            }
+            
+            // Handle empty results after filtering
+            if (filteredDocuments.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'flex';
+                return;
+            }
+            
+            // Render table rows
+            tableBody.innerHTML = filteredDocuments.map(doc => `
+                <tr>
+                    <td data-label="文档名称">
+                        <div class="doc-name">
+                            <i class="fas fa-file-pdf doc-icon"></i>
+                            <span>${doc.name}</span>
+                        </div>
+                    </td>
+                    <td class="type-cell" data-label="类型">
+                        <div class="type-badge ${typeBadges[doc.type] || 'badge-other'}">
+                            ${doc.type}
+                        </div>
+                    </td>
+                    <td class="link-cell" data-label="操作">
+                        <a href="${doc.url}" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> 查看文档
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+            
+            emptyState.style.display = 'none';
+        }
+        
+        // Filter documents by type
+        function filterByType(type) {
+            // Update active button
+            filterBtns.forEach(btn => {
+                if (btn.dataset.filter === type) {
+                    btn.classList.add('active');
+                    currentFilter = type;
+                } else if (btn.dataset.filter !== 'all') {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Update table
+            renderDocumentTable(allDocuments);
+        }
+        
+        // Search documents
+        function searchDocuments() {
+            currentSearch = searchInput.value.trim().toLowerCase();
+            renderDocumentTable(allDocuments);
+        }
+        
+        // Utility function to truncate text
+        function truncate(text, maxLength) {
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Filter buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active state
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Update filter
+                    currentFilter = btn.dataset.filter;
+                    renderDocumentTable(allDocuments);
+                });
+            });
+        }
+        
+        // Initialize the application
+        function init() {
+            fetchDocuments();
+            setupEventListeners();
+        }
+        
+        // Run the app
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
