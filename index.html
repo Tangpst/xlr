@@ -31,7 +31,14 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: relative;
         }
-        
+
+        .header img{
+            width: 38%;
+            height: auto;
+            display: block;
+            max-width: 100%;
+        }
+
         .header h1 {
             font-size: 2.4rem; /* 标题字号缩小 */
             margin-bottom: 12px; /* 间距适当减小 */
@@ -87,7 +94,7 @@
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* 阴影调整 */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 3px solid #2980b9; /* 边框适当减小 */
+            border-top: 3px solid #207cca; /* 边框适当减小 */
         }
         
         .doc-item:hover {
@@ -96,7 +103,7 @@
         }
         
         .doc-category {
-            background: #2980b9;
+            background: #207cca;
             color: white;
             padding: 15px; /* 内边距适当减小 */
             font-size: 1.3rem; /* 分类标题字号缩小 */
@@ -133,7 +140,7 @@
             font-size: 1.0rem; /* 链接字号缩小 */
             display: block;
             transition: color 0.3s;
-            padding: 6px 0; /* 内边距适当减小 */
+            padding: 3px 0; /* 内边距适当减小 */
             display: flex;
             align-items: center;
         }
@@ -228,7 +235,7 @@
         
         /* 培训记录快速入口 - 浮动样式 */
         .training-quick-access {
-            position: fixed; /* 改为固定定位 */
+            position:fixed; /* 改为固定定位 */
             top: 20px;
             right: 20px;
             background: rgba(255, 255, 255, 0.9); /* 背景改为不透明 */
@@ -333,8 +340,7 @@
 <body>
     <div class="header">
         <div class="container">
-            <h1>星丽仁医疗美容诊所</h1>
-            <p>文档表格</p>
+            <h1><img src="logo.png" alt="星丽仁医疗美容诊所"></h1>
         </div>
     </div>
     
@@ -342,12 +348,12 @@
     <div class="training-quick-access">
         <a href="training.html" class="training-link">
             <i class="fas fa-chalkboard-teacher"></i>
-            培训记录
+            Training log
         </a>
     </div>
     
     <div class="container">
-        <h2 class="section-title">诊所应急预案文档</h2>
+        <h2 class="section-title">Document management system</h2>
         
         <div class="api-status">
             <div class="api-status-item">
@@ -371,7 +377,7 @@
     
     <div class="footer">
         <div class="container">
-            <p>星丽仁医疗美容诊所 &copy; 2023 版权所有</p>
+            <p> 星丽仁医疗美容诊所 &copy; 2025 版权所有</p>
             <p>安全医疗，美丽永恒</p>
         </div>
     </div>
