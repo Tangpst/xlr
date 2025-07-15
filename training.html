@@ -19,6 +19,50 @@
             color: #333;
         }
         
+
+           /* 新增的主页按钮样式 */
+        #home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999;
+            background: linear-gradient(135deg, #2c7be5, #1e5ab4);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        #home-button:hover {
+            background: linear-gradient(135deg, #1e5ab4, #2c7be5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* ... 其他原有样式保持不变 ... */
+        
+        /* 媒体查询确保在小屏幕上按钮位置合适 */
+        @media (max-width: 768px) {
+            #home-button {
+                top: 15px;
+                right: 15px;
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -286,6 +330,7 @@
     </style>
 </head>
 <body>
+     <a href="index.html" id="home-button">主页</a>
     <div class="container">
         <div class="header">
             <h1>培训记录表-Training Record</h1>
