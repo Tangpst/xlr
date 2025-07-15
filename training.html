@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>培训信息记录表</title>
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -21,25 +22,38 @@
         
 
            /* 新增的主页按钮样式 */
-        #home-button {
-            position: fixed;
-            top: 20px;
+          .home-quick-access {
+            position:fixed; /* 改为固定定位 */
+            top: 25px;
             right: 20px;
-            z-index: 999;
-            background: linear-gradient(135deg, #2c7be5, #1e5ab4);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.9); /* 背景改为不透明 */
+            border-radius: 8px;
+            padding: 10px 15px; /* 内边距适当减小 */
+            backdrop-filter: blur(5px);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            border: 1px solid rgba(41, 128, 185, 0.2); /* 添加边框 */
         }
         
-        #home-button:hover {
-            background: linear-gradient(135deg, #1e5ab4, #2c7be5);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        .home-quick-access:hover {
+            background: rgba(255, 255, 255, 1); /* 悬停时更不透明 */
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .home-link {
+            color: #2980b9; /* 文字颜色改为蓝色 */
+            text-decoration: none;
+            font-size: 1.0rem; /* 链接字号缩小 */
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .home-link i {
+            margin-right: 6px; /* 间距适当减小 */
+            font-size: 1.1rem; /* 图标字号缩小 */
         }
         
         .container {
@@ -330,10 +344,17 @@
     </style>
 </head>
 <body>
-     <a href="index.html" id="home-button">主页</a>
+      
     <div class="container">
+         <div class="home-quick-access">
+            <a href="index.html" class="home-link">
+           <i class="fa-regular fa-hospital"></i>
+           Main Page
+        </a>
+      </div>
         <div class="header">
             <h1>培训记录表-Training Record</h1>
+           
         </div>
         
         <div class="filters">
