@@ -23,7 +23,7 @@
 
            /* 新增的主页按钮样式 */
           .home-quick-access {
-            position:fixed; /* 改为固定定位 */
+            position:absolute; /* 改为固定定位 */
             top: 25px;
             right: 20px;
             background: rgba(255, 255, 255, 0.9); /* 背景改为不透明 */
@@ -343,18 +343,17 @@
         }
     </style>
 </head>
-<body>
-      
-    <div class="container">
+<body> 
+    
          <div class="home-quick-access">
             <a href="index.html" class="home-link">
            <i class="fa-regular fa-hospital"></i>
            Main Page
         </a>
       </div>
+      <div class="container">
         <div class="header">
             <h1>培训记录表-Training Record</h1>
-           
         </div>
         
         <div class="filters">

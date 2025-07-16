@@ -404,12 +404,13 @@
             apiStatusEl.style.color = '#f39c12';
             
             // 创建四个分类块并显示加载状态
-            const categoryTitles = ['预案', '制度', '表格', '表单'];
+            const categoryTitles = ['预案', '制度', '表格', '表单','三证'];
             const categoryIcons = {
-                '预案': 'fa-file-medical',
-                '制度': 'fa-file-alt',
-                '表格下载': 'fa-file-excel',
-                '表格模板': 'fa-file-contract'
+                '预案': 'fa-circle-info',
+                '制度': 'fa-stethoscope',
+                '表格': 'fa-file-excel',
+                '表单': 'fa-list',
+                '三证': 'fa-ticket'
             };
             
             // 渲染分类块（带加载状态）
@@ -452,7 +453,8 @@
                             '预案': [],
                             '制度': [],
                             '表格': [],
-                            '表单': []
+                            '表单': [],
+                            '三证': []
                         };
                         
                         resultData.forEach(doc => {
@@ -500,7 +502,8 @@
                                     
                                     listItem.innerHTML = 
                                         `<a href="${docPath}" class="doc-link">
-                                            <i class="fas ${iconClass}"></i>
+                                            <i class="fa-solid ${iconClass}"></i>
+                                           
                                             ${docName}
                                         </a>`;
                                     docList.appendChild(listItem);
@@ -516,7 +519,7 @@
                                     
                                     listItem.innerHTML = 
                                         `<a href="${docPath}" class="doc-link">
-                                            <i class="fas ${iconClass}"></i>
+                                            <i class="fa-solid ${iconClass}"></i>
                                             ${docName}
                                         </a>`;
                                     docList.appendChild(listItem);
