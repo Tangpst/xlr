@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星丽仁·医疗美容诊所</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f4ff, #f0e9ff);
+            min-height: 100vh;
+            padding: 20px 15px;
+            color: #5a4a6a;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            position: relative;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #9c5fff, #ff6ec7);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(156, 95, 255, 0.3);
+        }
+        
+        .logo i {
+            font-size: 40px;
+            color: white;
+        }
+        
+        .title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #6a4b9a;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            color: #9e8fb5;
+            margin-top: 5px;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .nav-item {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(156, 95, 255, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 160px;
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(156, 95, 255, 0.25);
+        }
+        
+        .nav-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        .nav-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #5a4a6a;
+        }
+        
+        .nav-item:nth-child(1) .nav-icon {
+            background: linear-gradient(135deg, #6a5cff, #8e7dff);
+        }
+        
+        .nav-item:nth-child(2) .nav-icon {
+            background: linear-gradient(135deg, #ff6b8b, #ff9a9e);
+        }
+        
+        .nav-item:nth-child(3) .nav-icon {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+        
+        .nav-item:nth-child(4) .nav-icon {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        
+        .nav-item:nth-child(5) .nav-icon {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+        }
+        
+        .nav-item:nth-child(6) .nav-icon {
+            background: linear-gradient(135deg, #5ee7df, #b490ca);
+        }
+
+        .nav-item:nth-child(7) .nav-icon {
+            background: linear-gradient(135deg, #825ee6, #6b6374);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #9e8fb5;
+            font-size: 13px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 400px) {
+            .nav-grid {
+                gap: 15px;
+            }
+            
+            .nav-item {
+                padding: 20px 10px;
+                height: 140px;
+            }
+            
+            .nav-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h1 class="title">星丽仁·医疗美容诊所</h1>
+            <div class="subtitle">专业医疗美容管理平台</div>
+        </div>
+        
+        <div class="nav-grid">
+            <a href="https://www.example.com/outbound" class="nav-item" id="outbound-link">
+                <div class="nav-icon">
+                    <i class="fas fa-box-open" style="color: white;"></i>
+                </div>
+                <div class="nav-text">出库提交</div>
+            </a>
+            
+            <a href="https://www.example.com/inbound" class="nav-item" id="inbound-link">
+                <div class="nav-icon">
+                    <i class="fas fa-warehouse" style="color: white;"></i>
+                </div>
+                <div class="nav-text">入库提交</div>
+            </a>
+            
+            <a href="https://www.example.com/customer" class="nav-item" id="customer-link">
+                <div class="nav-icon">
+                    <i class="fas fa-user-friends" style="color: white;"></i>
+                </div>
+                <div class="nav-text">客户信息提交</div>
+            </a>
+            
+            <a href="https://www.example.com/product" class="nav-item" id="product-link">
+                <div class="nav-icon">
+                    <i class="fas fa-pills" style="color: white;"></i>
+                </div>
+                <div class="nav-text">产品信息提交</div>
+            </a>
+            
+            <a href="https://www.example.com/manual-query" class="nav-item" id="manual-post-link">
+                <div class="nav-icon">
+                    <i class="fas fa-play" style="color: white;"></i>
+                </div>
+                <div class="nav-text">手工提交</div>
+            </a>
+
+            <a href="https://www.example.com/manual-query" class="nav-item" id="manual-query-link">
+                <div class="nav-icon">
+                    <i class="fas fa-search" style="color: white;"></i>
+                </div>
+                <div class="nav-text">手工查询</div>
+            </a>
+            
+            <a href="https://www.example.com/inventory-query" class="nav-item" id="inventory-link">
+                <div class="nav-icon">
+                    <i class="fas fa-clipboard-list" style="color: white;"></i>
+                </div>
+                <div class="nav-text">库存查询</div>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 星丽仁·医疗美容诊所 管理系统</p>
+            <p>专业医疗美容管理平台</p>
+        </div>
+    </div>
+    
+    <script>
+        // 添加点击效果
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+        
+        // 链接地址管理
+        const links = {
+            outbound: 'https://f.wps.cn/g/cZ4gSgtF',
+            inbound: 'https://web.wps.cn/wo/sl/v324efVp?app_id=5FjYxbZI8LcwE78ipx1mGP',
+            customer: 'https://web.wps.cn/wo/sl/v34LYlhm?app_id=2R5wmiOSlFQHKdMMTBDsNs',
+            product: 'https://web.wps.cn/wo/sl/v31wRYUn?app_id=C8D5vNx5q5AVsREFJtpEF',
+            manualPost: 'https://web.wps.cn/wo/sl/v323XUl?app_id=1g0reKNPeFW0tY6l9Dq2wO',
+            manualQuery: 'https://f.wps.cn/g/VpXbUNtu',
+            inventory: 'https://web.wps.cn/wo/sl/v3b3WLZ?app_id=KbbFY9ws1yiHG2gfTn7Da'
+        };
+        
+        // 为每个导航项设置链接
+        document.getElementById('outbound-link').href = links.outbound;
+        document.getElementById('inbound-link').href = links.inbound;
+        document.getElementById('customer-link').href = links.customer;
+        document.getElementById('product-link').href = links.product;
+        document.getElementById('manual-post-link').href = links.manualPost;
+        document.getElementById('manual-query-link').href = links.manualQuery;
+        document.getElementById('inventory-link').href = links.inventory;
+        
+        // 也可以设置直接修改URL的方式更新链接
+        function updateLink(id, newUrl) {
+            document.getElementById(id).href = newUrl;
+        }
+    </script>
+</body>
+</html>
