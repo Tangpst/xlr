@@ -2,265 +2,273 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数字货币实时价格查询</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>数字货币实时价格</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #0a84ff;
+            --card-bg: rgba(30, 40, 60, 0.7);
+            --text-color: #f0f8ff;
+            --border-color: rgba(100, 150, 255, 0.2);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
             background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: #f0f8ff;
+            color: var(--text-color);
             min-height: 100vh;
-            padding: 20px;
+            padding: 12px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
         
         .container {
-            max-width: 1200px;
+            width: 100%;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
         }
         
         header {
             text-align: center;
-            padding: 40px 0;
+            padding: 25px 0;
             position: relative;
         }
         
-        header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, #f7971e, #ffd200);
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #3d8cff, #0a68ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-weight: 600;
         }
         
-        header p {
-            font-size: 1.2rem;
+        .subtitle {
+            font-size: 0.9rem;
             opacity: 0.85;
-            max-width: 700px;
-            margin: 0 auto;
-            line-height: 1.6;
+            line-height: 1.5;
+            margin-top: 8px;
         }
         
         .api-status {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 0.9rem;
-            padding: 5px 12px;
-            border-radius: 20px;
+            top: 15px;
+            right: 15px;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background-color: rgba(0, 180, 100, 0.15);
         }
         
-        .api-status .indicator {
-            width: 12px;
-            height: 12px;
+        .indicator {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background-color: #00c853;
-            animation: pulse 2s infinite;
         }
         
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 200, 83, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0); }
-        }
-        
-        .data-container {
+        .refresh-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            margin-top: 30px;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            z-index: 5;
+            transition: all 0.2s ease;
         }
         
-        .price-container {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(30, 40, 60, 0.5);
+        .refresh-btn:active {
+            transform: translateX(-50%) scale(0.95);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .coin-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .coin-card {
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
         }
         
-        .price-container h2 {
-            font-size: 1.6rem;
-            margin-bottom: 25px;
-            color: #bbd4ff;
+        .coin-card:active {
+            transform: scale(0.98);
+        }
+        
+        .coin-header {
             display: flex;
             align-items: center;
             gap: 12px;
         }
         
-        .coin-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-            background: rgba(40, 50, 80, 0.4);
-        }
-        
-        .coin-card:hover {
-            background: rgba(50, 65, 110, 0.6);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .coin-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
         .coin-icon {
-            width: 50px;
-            height: 50px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .coin-info {
+            flex-grow: 1;
+            overflow: hidden;
         }
         
         .coin-name {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .coin-symbol {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             opacity: 0.8;
         }
         
         .coin-price {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
-        .search-container {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(30, 40, 60, 0.5);
+        .change-indicator {
+            font-size: 0.85rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-top: -5px;
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        .search-section {
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(100, 150, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
         }
         
-        .search-container h2 {
-            font-size: 1.6rem;
-            margin-bottom: 25px;
-            color: #bbd4ff;
+        .search-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        
+        .search-header h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
         }
         
         .search-box {
             position: relative;
-            margin-bottom: 25px;
         }
         
         .search-box input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 14px 16px;
             border: none;
             border-radius: 12px;
             background: rgba(20, 25, 40, 0.7);
             color: white;
-            font-size: 1.1rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            transition: all 0.2s ease;
         }
         
         .search-box input:focus {
             outline: none;
-            box-shadow: 0 0 0 2px #3d8cff;
+            box-shadow: 0 0 0 2px var(--primary-color);
         }
         
-        .search-box button {
+        .search-button {
             position: absolute;
-            right: 10px;
-            top: 10px;
-            background: linear-gradient(90deg, #3d8cff, #0a68ff);
+            right: 6px;
+            top: 6px;
+            background: var(--primary-color);
             color: white;
             border: none;
-            padding: 8px 20px;
+            padding: 6px 18px;
             border-radius: 10px;
+            font-weight: 500;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
         }
         
-        .search-box button:hover {
-            transform: scale(1.05);
-            background: linear-gradient(90deg, #0a68ff, #3d8cff);
+        .search-button:active {
+            transform: scale(0.96);
+        }
+        
+        .coin-list {
+            margin-top: 18px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            line-height: 1.5;
+            padding: 0 5px;
         }
         
         .search-result {
-            margin-top: 30px;
-            padding: 20px;
             background: rgba(20, 25, 40, 0.7);
-            border-radius: 12px;
-            min-height: 150px;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 18px;
+            min-height: 180px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-        }
-        
-        .currency-info {
-            text-align: center;
-            font-size: 1.3rem;
-        }
-        
-        .currency-info .symbol {
-            font-size: 1.1rem;
-            opacity: 0.8;
-            margin-left: 10px;
-        }
-        
-        .currency-info .price {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 15px 0;
-            color: #ffd700;
-        }
-        
-        .currency-info .name {
-            font-size: 1.2rem;
-            color: #bbd4ff;
-            margin-top: 10px;
-        }
-        
-        .loading {
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 20px;
+            justify-content: center;
         }
         
         .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #3d8cff;
             width: 40px;
             height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+            margin-bottom: 15px;
         }
         
         @keyframes spin {
@@ -268,36 +276,73 @@
             100% { transform: rotate(360deg); }
         }
         
-        .coin-list {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .currency-info {
             text-align: center;
+            width: 100%;
+        }
+        
+        .currency-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+        }
+        
+        .result-symbol {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        .result-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 8px 0;
+            color: #ffd700;
+        }
+        
+        .result-name {
+            font-size: 1rem;
+            color: #bbd4ff;
+            margin-top: 8px;
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 10px;
+            font-size: 0.9rem;
         }
         
         footer {
             text-align: center;
-            margin-top: 50px;
-            padding: 25px;
-            opacity: 0.7;
-            font-size: 0.95rem;
+            margin: 30px 0 20px;
+            opacity: 0.6;
+            font-size: 0.8rem;
+            padding: 0 10px;
         }
         
-        .note {
-            background: rgba(255, 255, 255, 0.07);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 30px;
-            font-size: 0.95rem;
-        }
-        
-        @media (max-width: 768px) {
-            .price-container, .search-container {
-                min-width: 100%;
+        /* 超小屏幕优化 */
+        @media (max-width: 400px) {
+            .coin-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
             
-            header h1 {
-                font-size: 2.2rem;
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .subtitle {
+                font-size: 0.85rem;
+            }
+            
+            .coin-name {
+                font-size: 0.95rem;
+            }
+            
+            .coin-price {
+                font-size: 1.2rem;
+            }
+            
+            .search-section {
+                padding: 16px;
             }
         }
     </style>
@@ -305,118 +350,110 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-coins"></i> 数字货币实时价格</h1>
-            <p>使用币安实时API获取最新行情数据</p>
+            <h1>
+                <i class="fas fa-coins"></i>
+                数字货币价格
+            </h1>
+            <div class="subtitle">实时行情数据 · 币安API提供</div>
+            
             <div class="api-status">
                 <div class="indicator"></div>
-                <span>API在线</span>
-            </div>
-        </header>
-        
-        <div class="data-container">
-            <div class="price-container">
-                <h2><i class="fas fa-star"></i> 热门数字货币</h2>
-                <div class="featured-coins">
-                    <!-- BTC价格卡 -->
-                    <div class="coin-card" id="btc-card">
-                        <div class="coin-info">
-                            <div class="coin-icon" style="background-color: #f7931a20;">
-                                <i class="fab fa-bitcoin" style="color: #f7931a;"></i>
-                            </div>
-                            <div>
-                                <div class="coin-name">比特币</div>
-                                <div class="coin-symbol">BTC/USDT</div>
-                            </div>
-                        </div>
-                        <div class="coin-price">
-                            <div id="btc-price">加载中...</div>
-                        </div>
-                    </div>
-                    
-                    <!-- ETH价格卡 -->
-                    <div class="coin-card" id="eth-card">
-                        <div class="coin-info">
-                            <div class="coin-icon" style="background-color: #454a7520;">
-                                <i class="fab fa-ethereum" style="color: #454a75;"></i>
-                            </div>
-                            <div>
-                                <div class="coin-name">以太坊</div>
-                                <div class="coin-symbol">ETH/USDT</div>
-                            </div>
-                        </div>
-                        <div class="coin-price">
-                            <div id="eth-price">加载中...</div>
-                        </div>
-                    </div>
-                    
-                    <!-- BNB价格卡 -->
-                    <div class="coin-card" id="bnb-card">
-                        <div class="coin-info">
-                            <div class="coin-icon" style="background-color: #f3ba2f20;">
-                                <i class="fas fa-exchange-alt" style="color: #f3ba2f;"></i>
-                            </div>
-                            <div>
-                                <div class="coin-name">币安币</div>
-                                <div class="coin-symbol">BNB/USDT</div>
-                            </div>
-                        </div>
-                        <div class="coin-price">
-                            <div id="bnb-price">加载中...</div>
-                        </div>
-                    </div>
-                    
-                    <!-- FIL价格卡 -->
-                    <div class="coin-card" id="fil-card">
-                        <div class="coin-info">
-                            <div class="coin-icon" style="background-color: #0090ff20;">
-                                <i class="fas fa-database" style="color: #0090ff;"></i>
-                            </div>
-                            <div>
-                                <div class="coin-name">Filecoin</div>
-                                <div class="coin-symbol">FIL/USDT</div>
-                            </div>
-                        </div>
-                        <div class="coin-price">
-                            <div id="fil-price">加载中...</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="note">
-                    <p>所有价格以USDT稳定币计价，每10秒自动更新。数据源：币安API</p>
-                </div>
+                <span>在线</span>
             </div>
             
-            <div class="search-container">
-                <h2><i class="fas fa-search"></i> 查询其他币种</h2>
-                
-                <div class="search-box">
-                    <input type="text" id="currency-input" placeholder="输入币种代码（如：DOGE、SOL、XRP...）">
-                    <button id="search-btn"><i class="fas fa-search"></i> 查询</button>
-                </div>
-                
-                <div class="coin-list">
-                    <p>常见币种：DOGE（狗狗币）, SOL（Solana）, XRP（瑞波币）, ADA（Cardano）, DOT（Polkadot）</p>
-                </div>
-                
-                <div id="result-container">
-                    <div class="search-result" id="search-result">
-                        <div style="text-align: center; opacity: 0.7;">
-                            <i class="fas fa-search" style="font-size: 4rem; margin-bottom: 20px;"></i>
-                            <p>输入币种代码查询实时价格</p>
-                        </div>
+            <button class="refresh-btn" id="refresh-btn">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </header>
+        
+        <div class="coin-grid" id="coin-grid">
+            <!-- BTC价格卡 -->
+            <div class="coin-card">
+                <div class="coin-header">
+                    <div class="coin-icon" style="background-color: #f7931a20;">
+                        <i class="fab fa-bitcoin" style="color: #f7931a;"></i>
+                    </div>
+                    <div class="coin-info">
+                        <div class="coin-name">比特币</div>
+                        <div class="coin-symbol">BTC/USDT</div>
                     </div>
                 </div>
+                <div class="coin-price" id="btc-price">加载中...</div>
+            </div>
+            
+            <!-- ETH价格卡 -->
+            <div class="coin-card">
+                <div class="coin-header">
+                    <div class="coin-icon" style="background-color: #454a7520;">
+                        <i class="fab fa-ethereum" style="color: #454a75;"></i>
+                    </div>
+                    <div class="coin-info">
+                        <div class="coin-name">以太坊</div>
+                        <div class="coin-symbol">ETH/USDT</div>
+                    </div>
+                </div>
+                <div class="coin-price" id="eth-price">加载中...</div>
+            </div>
+            
+            <!-- BNB价格卡 -->
+            <div class="coin-card">
+                <div class="coin-header">
+                    <div class="coin-icon" style="background-color: #f3ba2f20;">
+                        <i class="fas fa-exchange-alt" style="color: #f3ba2f;"></i>
+                    </div>
+                    <div class="coin-info">
+                        <div class="coin-name">币安币</div>
+                        <div class="coin-symbol">BNB/USDT</div>
+                    </div>
+                </div>
+                <div class="coin-price" id="bnb-price">加载中...</div>
+            </div>
+            
+            <!-- FIL价格卡 -->
+            <div class="coin-card">
+                <div class="coin-header">
+                    <div class="coin-icon" style="background-color: #0090ff20;">
+                        <i class="fas fa-database" style="color: #0090ff;"></i>
+                    </div>
+                    <div class="coin-info">
+                        <div class="coin-name">Filecoin</div>
+                        <div class="coin-symbol">FIL/USDT</div>
+                    </div>
+                </div>
+                <div class="coin-price" id="fil-price">加载中...</div>
             </div>
         </div>
         
+        <section class="search-section">
+            <div class="search-header">
+                <h2>
+                    <i class="fas fa-search"></i>
+                    币种查询
+                </h2>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" id="currency-input" placeholder="输入币种代码（如 DOGE, SOL...）">
+                <button class="search-button" id="search-btn">查询</button>
+            </div>
+            
+            <div class="coin-list">
+                常见币种：DOGE（狗狗币）, SOL（Solana）, XRP（瑞波币）, ADA（卡尔达诺）
+            </div>
+            
+            <div class="search-result" id="search-result">
+                <i class="fas fa-search" style="font-size: 3rem; opacity: 0.5;"></i>
+                <p style="margin-top: 15px; opacity: 0.7;">输入币种代码查询实时价格</p>
+            </div>
+        </section>
+        
         <footer>
-            <p>基于币安API的数字货币价格查询 | 实时数据更新</p>
+            <p>基于币安API · 每10秒自动更新</p>
         </footer>
     </div>
 
     <script>
-        // 您的API端点
+        // API端点
         const API_ENDPOINT = 'https://z88qa6rbtl.execute-api.ap-southeast-1.amazonaws.com/prod/binance';
         
         // 获取DOM元素
@@ -427,8 +464,9 @@
         const currencyInput = document.getElementById('currency-input');
         const searchBtn = document.getElementById('search-btn');
         const searchResult = document.getElementById('search-result');
+        const refreshBtn = document.getElementById('refresh-btn');
         
-        // 为币种设置图标映射
+        // 币种图标映射
         const coinIcons = {
             BTC: 'fab fa-bitcoin',
             ETH: 'fab fa-ethereum',
@@ -441,7 +479,7 @@
             DOT: 'fas fa-circle'
         };
         
-        // 为币种设置颜色映射
+        // 币种颜色映射
         const coinColors = {
             BTC: '#f7931a',
             ETH: '#454a75',
@@ -454,7 +492,7 @@
             DOT: '#e6007a'
         };
         
-        // 币种全名映射
+        // 币种名称映射
         const coinNames = {
             BTC: '比特币 (Bitcoin)',
             ETH: '以太坊 (Ethereum)',
@@ -464,136 +502,164 @@
             XRP: '瑞波币 (Ripple)',
             ADA: '卡尔达诺 (Cardano)',
             SOL: 'Solana',
-            DOT: '波卡 (Polkadot)',
-            LTC: '莱特币 (Litecoin)',
-            UNI: 'Uniswap',
-            LINK: 'Chainlink',
-            MATIC: 'Polygon',
-            TRX: '波场 (TRON)',
-            AVAX: 'Avalanche',
-            ATOM: 'Cosmos'
+            DOT: '波卡 (Polkadot)'
         };
         
-        // 格式化价格数字
+        // 上次价格记录
+        let previousPrices = {
+            BTC: 0,
+            ETH: 0,
+            BNB: 0,
+            FIL: 0
+        };
+        
+        // 格式化价格
         function formatPrice(price) {
-            const number = parseFloat(price);
-            if (isNaN(number)) return '0.00';
-            
-            if (number > 1000) {
-                return number.toFixed(2);
-            } else if (number > 1) {
-                return number.toFixed(4);
-            } else if (number > 0.1) {
-                return number.toFixed(6);
+            price = parseFloat(price);
+            if (price >= 100) {
+                return '$' + price.toFixed(2);
+            } else if (price >= 1) {
+                return '$' + price.toFixed(4);
             } else {
-                return number.toFixed(8);
+                return '$' + price.toFixed(6);
             }
         }
         
-        // 查询币种价格
+        // 获取币价
         async function getPrice(symbol) {
             try {
+                // 添加加载状态
+                if (symbol === 'BTC') btcPrice.innerHTML = `<div style="display:inline-block; width:20px; height:20px; border:2px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; animation:spin 1s linear infinite"></div>`;
+                
                 const response = await fetch(`${API_ENDPOINT}?symbol=${symbol.toUpperCase()}USDT`);
-                if (!response.ok) {
-                    throw new Error(`API错误: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`API错误: ${response.status}`);
                 
                 const data = await response.json();
-                if (data.price) {
-                    return formatPrice(data.price);
-                } else {
-                    throw new Error('未找到价格数据');
-                }
+                if (!data.price) throw new Error('无价格数据');
+                
+                return parseFloat(data.price);
             } catch (error) {
                 console.error('获取价格错误:', error);
-                return '获取失败';
+                return null;
             }
         }
         
-        // 更新热门币种价格
-        async function updateFeaturedPrices() {
-            try {
-                // 同时获取所有币种价格
-                const [btc, eth, bnb, fil] = await Promise.all([
-                    getPrice('BTC'),
-                    getPrice('ETH'),
-                    getPrice('BNB'),
-                    getPrice('FIL')
-                ]);
+        // 更新币种价格显示
+        async function updateCoinPrice(coin, element) {
+            const price = await getPrice(coin);
+            if (price !== null) {
+                // 检查价格变动
+                const diff = price - previousPrices[coin];
+                previousPrices[coin] = price;
                 
-                btcPrice.textContent = `$${btc}`;
-                ethPrice.textContent = `$${eth}`;
-                bnbPrice.textContent = `$${bnb}`;
-                filPrice.textContent = `$${fil}`;
+                element.textContent = formatPrice(price);
                 
-                // 更新卡片背景以指示数据状态
-                document.getElementById('btc-card').style.background = 'rgba(40, 50, 80, 0.4)';
-                document.getElementById('eth-card').style.background = 'rgba(40, 50, 80, 0.4)';
-                document.getElementById('bnb-card').style.background = 'rgba(40, 50, 80, 0.4)';
-                document.getElementById('fil-card').style.background = 'rgba(40, 50, 80, 0.4)';
-            } catch (error) {
-                console.error('更新价格错误:', error);
+                // 添加价格变动效果
+                if (diff !== 0) {
+                    element.classList.add('price-update');
+                    setTimeout(() => element.classList.remove('price-update'), 1000);
+                }
+            } else {
+                element.textContent = '更新失败';
             }
         }
         
-        // 显示搜索的币种价格
-        async function showSearchedCurrency() {
+        // 更新所有币价
+        async function updateAllPrices() {
+            // 添加视觉反馈
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            refreshBtn.style.transform = 'translateX(-50%) rotate(180deg)';
+            
+            await Promise.all([
+                updateCoinPrice('BTC', btcPrice),
+                updateCoinPrice('ETH', ethPrice),
+                updateCoinPrice('BNB', bnbPrice),
+                updateCoinPrice('FIL', filPrice)
+            ]);
+            
+            // 重置按钮状态
+            setTimeout(() => {
+                refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+                refreshBtn.style.transform = 'translateX(-50%)';
+            }, 1000);
+        }
+        
+        // 显示搜索结果
+        async function showSearchResult() {
             const symbol = currencyInput.value.trim().toUpperCase();
             if (!symbol) return;
             
-            // 清空输入框
             currencyInput.value = '';
             
             // 显示加载状态
             searchResult.innerHTML = `
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>正在查询 ${symbol} 价格...</p>
-                </div>
+                <div class="loading-spinner"></div>
+                <div style="margin-top: 15px;">查询 ${symbol} 价格中...</div>
             `;
             
             try {
                 const price = await getPrice(symbol);
+                if (price === null) throw new Error('价格获取失败');
                 
-                // 获取图标和名称
                 const iconClass = coinIcons[symbol] || 'fas fa-coins';
-                const coinName = coinNames[symbol] || `${symbol} 价格`;
                 const coinColor = coinColors[symbol] || '#4e89e5';
+                const coinName = coinNames[symbol] || `${symbol}`;
                 
-                // 更新结果
                 searchResult.innerHTML = `
                     <div class="currency-info">
-                        <i class="${iconClass}" style="font-size: 4rem; color: ${coinColor}; margin-bottom: 15px;"></i>
-                        <div class="symbol">${symbol}/USDT</div>
-                        <div class="price">$${price}</div>
-                        <div class="name">${coinName}</div>
+                        <div class="currency-icon">
+                            <i class="${iconClass}" style="color: ${coinColor}"></i>
+                        </div>
+                        <div class="result-symbol">${symbol}/USDT</div>
+                        <div class="result-price">${formatPrice(price)}</div>
+                        <div class="result-name">${coinName}</div>
                     </div>
                 `;
             } catch (error) {
                 searchResult.innerHTML = `
-                    <div class="currency-info">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #ff6b6b; margin-bottom: 15px;"></i>
-                        <div class="price">查询失败</div>
-                        <div class="name">无法获取 ${symbol} 价格</div>
-                        <p style="margin-top: 15px; font-size: 1rem;">请检查币种代码是否正确</p>
+                    <div style="text-align: center; padding: 20px 0;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 2.5rem; color: #ff6b6b; margin-bottom: 15px;"></i>
+                        <div>查询失败</div>
+                        <div class="error-message">无法获取 ${symbol} 价格</div>
                     </div>
                 `;
             }
         }
         
         // 事件监听器
-        searchBtn.addEventListener('click', showSearchedCurrency);
-        currencyInput.addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                showSearchedCurrency();
-            }
+        refreshBtn.addEventListener('click', updateAllPrices);
+        searchBtn.addEventListener('click', showSearchResult);
+        currencyInput.addEventListener('keyup', (e) => e.key === 'Enter' && showSearchResult());
+        
+        // 点击币卡加载该币种详情
+        document.querySelectorAll('.coin-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const symbol = this.querySelector('.coin-symbol').textContent.split('/')[0];
+                currencyInput.value = symbol;
+                showSearchResult();
+            });
         });
         
-        // 初始化页面时获取价格
-        updateFeaturedPrices();
+        // 初始化页面
+        updateAllPrices();
         
-        // 每10秒自动更新价格
-        setInterval(updateFeaturedPrices, 10000);
+        // 定时更新价格（移动端减少频率）
+        setInterval(updateAllPrices, 10000);
+        
+        // 添加CSS动画
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            .price-update {
+                animation: pulse 1s;
+            }
+            
+            @keyframes pulse {
+                0% { opacity: 0.5; transform: scale(0.98); }
+                50% { opacity: 1; transform: scale(1.03); }
+                100% { opacity: 1; transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html>
