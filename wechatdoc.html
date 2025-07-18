@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金山文档表单访问</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f7f9fc, #e8f0ff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4169e1, #1e90ff);
+            color: white;
+            padding: 30px 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 30px 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-field:focus {
+            border-color: #1e90ff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #4169e1, #1e90ff);
+            color: white;
+            padding: 16px 0;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(30, 144, 255, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(30, 144, 255, 0.4);
+        }
+        
+        .instructions {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f5f8ff;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            text-align: left;
+        }
+        
+        .instructions h3 {
+            color: #1e90ff;
+            margin-bottom: 10px;
+        }
+        
+        .step {
+            margin-bottom: 8px;
+        }
+        
+        .tips {
+            font-size: 12px;
+            color: #999;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .title {
+                font-size: 22px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+            
+            .btn {
+                padding: 14px 0;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">金山文档表单访问</h1>
+            <p class="subtitle">在微信中直接打开文档表单</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="input-group">
+                <label for="form-id">表单ID (从分享链接获取)</label>
+                <input 
+                    type="text" 
+                    id="form-id" 
+                    class="input-field" 
+                    placeholder="例如: Y5B8Z3cP8X2K"
+                    value="Y5B8Z3cP8X2K">
+            </div>
+            
+            <button id="jump-btn" class="btn">打开金山文档表单</button>
+            
+            <div class="instructions">
+                <h3>使用说明</h3>
+                <p class="step">1. 在金山文档中获取表单的分享链接</p>
+                <p class="step">2. 从链接中复制表单ID（通常是8-12位字母数字组合）</p>
+                <p class="step">3. 粘贴到上方输入框</p>
+                <p class="step">4. 点击按钮跳转到微信小程序</p>
+            </div>
+            
+            <p class="tips">* 确保已在微信中登录金山文档账号</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('jump-btn').addEventListener('click', function() {
+            const formId = document.getElementById('form-id').value;
+            
+            if (!formId) {
+                alert('请输入表单ID');
+                return;
+            }
+            
+            // 金山文档小程序URL Scheme格式
+            const urlScheme = `weixin://dl/business/?t=kdocs-form-${formId}`;
+            
+            // 创建隐藏iframe进行跳转
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = urlScheme;
+            document.body.appendChild(iframe);
+            
+            // 添加备用方案
+            setTimeout(function() {
+                alert('跳转失败，请在微信中打开此页面');
+                
+                // 显示跳转说明
+                const instructions = `
+                    <div class="instructions">
+                        <h3>备用跳转方式</h3>
+                        <p>1. 请确保已安装微信</p>
+                        <p>2. 复制以下链接：</p>
+                        <div style="background:#f0f0f0; padding:10px; border-radius:5px; margin:10px 0; overflow-wrap:break-word;">
+                            kdocs.cn/form/${formId}
+                        </div>
+                        <p>3. 打开微信→右上角+号→添加朋友→粘贴并搜索</p>
+                    </div>
+                `;
+                
+                document.querySelector('.form-container').innerHTML += instructions;
+            }, 800);
+        });
+    </script>
+</body>
+</html>
