@@ -135,6 +135,9 @@
             background: linear-gradient(135deg, #825ee6, #6b6374);
         }
         
+        .nav-item:nth-child(8) .nav-icon {
+            background: linear-gradient(135deg, #e6446c, #aa85d4);
+        }
         .footer {
             text-align: center;
             margin-top: 40px;
@@ -203,7 +206,7 @@
             
             <a href="https://www.example.com/manual-query" class="nav-item" id="manual-post-link">
                 <div class="nav-icon">
-                    <i class="fas fa-play" style="color: white;"></i>
+                    <i class="fa-solid fa-user-nurse" style="color: white;"></i>
                 </div>
                 <div class="nav-text">手工提交</div>
             </a>
@@ -221,8 +224,16 @@
                 </div>
                 <div class="nav-text">库存查询</div>
             </a>
-        </div>
         
+        
+         <a href="https://www.example.com/inventory-query" class="nav-item" id="customer-post-link">
+                <div class="nav-icon">
+                    <i class="fa-solid fa-user"" style="color: white;">
+                </div>
+                <div class="nav-text">编号查询</div>
+            </a>
+        </div>
+
         <div class="footer">
             <p>© 2023 星丽仁·医疗美容诊所 管理系统</p>
             <p>专业医疗美容管理平台</p>
@@ -248,7 +259,8 @@
             product: 'https://web.wps.cn/wo/sl/v31wRYUn?app_id=C8D5vNx5q5AVsREFJtpEF',
             manualPost: 'https://web.wps.cn/wo/sl/v323XUl?app_id=1g0reKNPeFW0tY6l9Dq2wO',
             manualQuery: 'https://f.wps.cn/g/VpXbUNtu',
-            inventory: 'https://web.wps.cn/wo/sl/v3b3WLZ?app_id=KbbFY9ws1yiHG2gfTn7Da'
+            inventory: 'https://web.wps.cn/wo/sl/v3b3WLZ?app_id=KbbFY9ws1yiHG2gfTn7Da',
+            customerPost: 'https://web.wps.cn/wo/sl/v33G9gOV?app_id=17hOC0sbqYKK6vYrogtRPD'
         };
         
         // 为每个导航项设置链接
@@ -258,7 +270,8 @@
         document.getElementById('product-link').href = links.product;
         document.getElementById('manual-post-link').href = links.manualPost;
         document.getElementById('manual-query-link').href = links.manualQuery;
-        document.getElementById('inventory-link').href = links.inventory;
+        document.getElementById('inventory-link').href = links.inventory; 
+        document.getElementById('customer-post-link').href = links.customerPost;
         
         // 也可以设置直接修改URL的方式更新链接
         function updateLink(id, newUrl) {
