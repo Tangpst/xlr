@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>广告机媒体播放器</title>
+    <title>广告机全屏媒体轮播</title>
     <style>
         * {
             margin: 0;
@@ -13,37 +13,34 @@
         }
         
         body {
-            background-color: #121212;
+            background-color: #000;
             width: 100%;
             height: 100vh;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         
         #player-container {
-            position: relative;
-            width: 1920px;
-            height: 1080px;
-            max-width: 100%;
-            max-height: 100%;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             background-color: #000;
             overflow: hidden;
-            border-radius: 8px;
         }
         
         #display-time {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 25px;
+            right: 30px;
             background: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 1.1rem;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 500;
             z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
         
         #media-display {
@@ -66,7 +63,7 @@
             height: 100%;
             object-fit: cover;
             opacity: 0;
-            transition: opacity 1.5s ease;
+            transition: opacity 1.2s ease;
             z-index: 1;
         }
         
@@ -75,170 +72,45 @@
             z-index: 2;
         }
         
-        #title-bar {
+        .progress-container {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            color: white;
-            padding: 30px 20px 10px;
-            text-align: center;
-            z-index: 5;
-        }
-        
-        #title-bar h1 {
-            font-size: 2.2rem;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        #title-bar p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding-bottom: 10px;
-        }
-        
-        #control-panel {
-            position: absolute;
-            bottom: 10px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 7;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 12px;
-            border-radius: 30px;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-        
-        #control-panel:hover {
-            opacity: 1;
-        }
-        
-        .control-btn {
+            width: 300px;
+            height: 4px;
             background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s, transform 0.2s;
-        }
-        
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.35);
-            transform: scale(1.1);
-        }
-        
-        .media-info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 1.1rem;
-            z-index: 10;
-        }
-        
-        #media-counter {
-            position: absolute;
-            bottom: 80px;
-            right: 25px;
-            display: flex;
-            gap: 10px;
+            border-radius: 2px;
+            overflow: hidden;
             z-index: 6;
         }
         
-        .counter-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .counter-dot.active {
-            background: #fff;
-            transform: scale(1.2);
-        }
-        
-        /* 响应式调整 */
-        @media (max-width: 1920px) {
-            #player-container {
-                transform: scale(0.95);
-            }
-        }
-        
-        @media (max-width: 1600px) {
-            #title-bar h1 { font-size: 1.8rem; }
-            #title-bar p { font-size: 1rem; }
-        }
-        
-        @media (max-width: 1366px) {
-            #player-container {
-                transform: scale(0.85);
-            }
-        }
-        
-        @media (max-width: 1280px) {
-            #player-container {
-                transform: scale(0.75);
-            }
-        }
-        
-        @media (max-width: 1024px) {
-            #player-container {
-                transform: scale(0.65);
-            }
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background: #ffffff;
+            transition: width 0.1s linear;
         }
     </style>
 </head>
 <body>
     <div id="player-container">
-        <div id="display-time">2025年8月10日 星期日 10:43:47</div>
+        <div id="display-time">2025年8月10日 星期日 11:24:33</div>
         
         <div id="media-display">
-            <img src="https://picsum.photos/1920/1080?random=1" class="media-item active" alt="广告图片">
-            <video autoplay muted loop class="media-item" id="video1">
-                <source src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4" type="video/mp4">
-            </video>
-            <img src="https://picsum.photos/1920/1080?random=2" class="media-item" alt="广告图片">
-            <img src="https://picsum.photos/1920/1080?random=3" class="media-item" alt="广告图片">
-            <video autoplay muted loop class="media-item" id="video2">
-                <source src="https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_5mb.mp4" type="video/mp4">
-            </video>
-            <div class="media-info">幻灯片 1/6</div>
+            <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80" class="media-item active" alt="广告图片">
+            <!-- <video autoplay loop class="media-item" id="video1">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-flying-over-a-city-at-night-42971-large.mp4" type="video/mp4">
+            </video> -->
+            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80" class="media-item" alt="广告图片">
+            <img src="https://images.unsplash.com/photo-1538688270603-57a4988c8afc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080&q=80" class="media-item" alt="广告图片">
+            <!-- <video autoplay loop class="media-item" id="video2">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-sunset-timelapse-over-a-city-42981-large.mp4" type="video/mp4">
+            </video> -->
         </div>
         
-        <div id="title-bar">
-            <h1>创新科技广告展示</h1>
-            <p>为您呈现最新产品与科技动态 - 每日更新 - 支持多种媒体格式</p>
-        </div>
-        
-        <div id="media-counter">
-            <div class="counter-dot active"></div>
-            <div class="counter-dot"></div>
-            <div class="counter-dot"></div>
-            <div class="counter-dot"></div>
-            <div class="counter-dot"></div>
-            <div class="counter-dot"></div>
-        </div>
-        
-        <div id="control-panel">
-            <button class="control-btn" id="prev-btn">◀</button>
-            <button class="control-btn" id="play-btn">❚❚</button>
-            <button class="control-btn" id="next-btn">▶</button>
+        <div class="progress-container">
+            <div id="progress-bar"></div>
         </div>
     </div>
 
@@ -246,35 +118,15 @@
         // 媒体播放器功能实现
         document.addEventListener('DOMContentLoaded', function() {
             const mediaItems = document.querySelectorAll('.media-item');
-            const counterDots = document.querySelectorAll('.counter-dot');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const playBtn = document.getElementById('play-btn');
-            const mediaInfo = document.querySelector('.media-info');
+            const progressBar = document.getElementById('progress-bar');
             const timeDisplay = document.getElementById('display-time');
             
             let currentIndex = 0;
             let timer = null;
+            let progressTimer = null;
             let isPlaying = true;
             let isVideoPlaying = false;
-            
-            // 更新媒体信息
-            function updateMediaInfo() {
-                mediaInfo.textContent = `幻灯片 ${currentIndex + 1}/${mediaItems.length}`;
-                
-                // 更新圆点状态
-                counterDots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentIndex);
-                });
-                
-                // 检查当前媒体类型
-                const currentMedia = mediaItems[currentIndex];
-                isVideoPlaying = currentMedia.tagName === 'VIDEO';
-                
-                if (isVideoPlaying && !currentMedia.paused) {
-                    playBtn.textContent = '❚❚';
-                }
-            }
+            let slideDuration = 5000; // 5秒图片切换
             
             // 显示媒体项
             function showMedia(index) {
@@ -284,6 +136,7 @@
                         
                         // 如果是视频，确保播放
                         if (item.tagName === 'VIDEO') {
+                            item.currentTime = 0;
                             item.play().catch(e => {
                                 console.error('视频播放失败:', e);
                             });
@@ -299,23 +152,35 @@
                 });
                 
                 currentIndex = index;
-                updateMediaInfo();
+                
+                // 检查当前媒体类型
+                const currentMedia = mediaItems[currentIndex];
+                isVideoPlaying = currentMedia.tagName === 'VIDEO';
+                
+                // 开始进度条动画
+                startProgressBar();
+            }
+            
+            // 更新进度条
+            function startProgressBar() {
+                clearInterval(progressTimer);
+                let percent = 0;
+                const duration = isVideoPlaying ? mediaItems[currentIndex].duration * 1000 : slideDuration;
+                
+                progressTimer = setInterval(() => {
+                    percent += 10;
+                    const progress = (percent / duration) * 100;
+                    progressBar.style.width = progress + '%';
+                    
+                    if (progress >= 100) {
+                        clearInterval(progressTimer);
+                    }
+                }, 10);
             }
             
             // 下一张/视频
             function nextMedia() {
                 let newIndex = (currentIndex + 1) % mediaItems.length;
-                showMedia(newIndex);
-                
-                // 重置自动播放计时器
-                if (isPlaying) {
-                    startAutoPlay();
-                }
-            }
-            
-            // 上一张/视频
-            function prevMedia() {
-                let newIndex = (currentIndex - 1 + mediaItems.length) % mediaItems.length;
                 showMedia(newIndex);
                 
                 // 重置自动播放计时器
@@ -337,7 +202,7 @@
                 } 
                 // 否则按计划时间切换到下一个
                 else {
-                    timer = setTimeout(nextMedia, 5000); // 5秒切换图片
+                    timer = setTimeout(nextMedia, slideDuration);
                 }
             }
             
@@ -357,37 +222,10 @@
                 timeDisplay.textContent = now.toLocaleDateString('zh-CN', options);
             }
             
-            // 按钮事件监听
-            prevBtn.addEventListener('click', prevMedia);
-            nextBtn.addEventListener('click', nextMedia);
-            
-            playBtn.addEventListener('click', function() {
-                if (isPlaying) {
-                    isPlaying = false;
-                    playBtn.textContent = '▶';
-                    
-                    if (isVideoPlaying) {
-                        mediaItems[currentIndex].pause();
-                    }
-                    
-                    clearTimeout(timer);
-                } else {
-                    isPlaying = true;
-                    playBtn.textContent = '❚❚';
-                    
-                    if (isVideoPlaying) {
-                        mediaItems[currentIndex].play().catch(e => {
-                            console.error('视频播放失败:', e);
-                        });
-                    }
-                    
-                    startAutoPlay();
-                }
-            });
-            
             // 初始化
-            updateDateTime();
+            showMedia(0);
             startAutoPlay();
+            updateDateTime();
             setInterval(updateDateTime, 1000);
         });
     </script>
