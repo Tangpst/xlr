@@ -138,6 +138,10 @@
         .nav-item:nth-child(8) .nav-icon {
             background: linear-gradient(135deg, #e6446c, #aa85d4);
         }
+
+        .nav-item:nth-child(9) .nav-icon {
+            background: linear-gradient(135deg, #1f75a7, #67abd8);
+        }
         .footer {
             text-align: center;
             margin-top: 40px;
@@ -229,6 +233,13 @@
                 </div>
                 <div class="nav-text">编号查询</div>
             </a>
+
+              <a href="https://www.example.com/inventory-query" class="nav-item" id="training-post-link">
+                <div class="nav-icon">
+                    <i class="fa-solid fa-chalkboard-user" style="color: white;"></i>
+                </div>
+                <div class="nav-text">培训记录提交</div>
+            </a>
         </div>
 
         <div class="footer">
@@ -256,7 +267,8 @@
             manualPost: 'https://web.wps.cn/wo/sl/v31eKlYG?app_id=37fkVvYWACnV9WracLmEFf',  
             manualQuery: 'https://f.wps.cn/g/VpXbUNtu',
             inventory: 'https://web.wps.cn/wo/sl/v3b3WLZ?app_id=KbbFY9ws1yiHG2gfTn7Da',
-            customerPost: 'https://web.wps.cn/wo/sl/v33G9gOV?app_id=17hOC0sbqYKK6vYrogtRPD'
+            customerPost: 'https://web.wps.cn/wo/sl/v33G9gOV?app_id=17hOC0sbqYKK6vYrogtRPD',
+            trainingPost: 'https://f.wps.cn/g/GP7XH8zg'
         };
         
         // 为每个导航项设置链接
@@ -268,7 +280,7 @@
         document.getElementById('manual-query-link').href = links.manualQuery;
         document.getElementById('inventory-link').href = links.inventory; 
         document.getElementById('customer-post-link').href = links.customerPost;
-        
+        document.getElementById('training-post-link').href = links.trainingPost;
         // 也可以设置直接修改URL的方式更新链接
         function updateLink(id, newUrl) {
             document.getElementById(id).href = newUrl;
